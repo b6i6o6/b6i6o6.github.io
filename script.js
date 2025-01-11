@@ -4,7 +4,7 @@ const MAX_YEAR = 2024;
 const ENDPOINT = "https://eurovisionworld.com/eurovision/";
 
 const iframe = document.createElement("iframe");
-iframe.style.display = 'none';
+// iframe.style.display = 'none';
 document.body.append(iframe);
 document.querySelector('#play').addEventListener('click', play);
 
