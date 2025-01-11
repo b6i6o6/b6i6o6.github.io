@@ -22,8 +22,8 @@ async function play() {
         };
         iframe.addEventListener("load", handler);
     });
-    const votingTable = await parsingVotingTable;
     iframe.src = ENDPOINT + year;
+    const votingTable = await parsingVotingTable;
 
     // Choose a random country from that year.
     const index = randomIntFromInterval(0, votingTable.length - 1);
