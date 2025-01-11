@@ -35,7 +35,7 @@ async function play() {
         };
         iframe.addEventListener("load", handler);
     });
-    iframe.src = location;
+    iframe.src = songURL;
     const [artist, title, id] = await parsingSongData;
     const embed = `<iframe width="10" height="10" src="https://www.youtube.com/embed/${id}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
     document.querySelector('#video').innerHTML = embed;
