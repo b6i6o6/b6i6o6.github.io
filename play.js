@@ -1,37 +1,50 @@
 import { songs } from "./songs.js";
 
+const MIN_YEAR = 2024;
+const MAX_YEAR = 2024;
 const DEFAULT_TIMESTAMP = 30;
 const SONG_EXCERPT_DURATION = 25;
 
-
-let currentSongIndex;
-let currentSongTimeout;
 const params = new URLSearchParams(window.location.search);
+let currentSongIndex = Number(params.get("play").replace(/\D/g, ""));
+let currentSongTimeout;
 
-const video = document.querySelector('#video');
-const solution = document.querySelector('#solution');
 const playButton = document.querySelector('#play');
 const solutionButton = document.querySelector('#reveal');
-playButton.addEventListener('click', () => startSong());
-solutionButton.addEventListener('click', () => revealSong());
+const solution = document.querySelector('#solution');
+const embed = document.querySelector('#embed');
+const year = document.querySelector('#year');
+const country = document.querySelector("#country");
+const title = document.querySelector("#title");
+const artist = document.querySelector("#artist");
+const place = document.querySelector("#place");
+const video = document.querySelector('#video');
+
+playButton.addEventListener('click', () => {
+    startSong();
+    toggleButtons();
+    solution.style.visibility = "hidden";
+});
+solutionButton.addEventListener('click', () => {
+    revealSong();
+    toggleButtons();
+});
 
 function startSong() {
+    let song;
     if (params.has("play")) {
-        currentSongIndex = Number(params.get("play").replace(/\D/g, ""));
         params.delete("play");
+        song = songs[currentSongIndex];
     } else {
-        currentSongIndex = randomIntFromInterval(0, songs.length - 1);
+        do {
+            currentSongIndex = randomIntFromInterval(0, songs.length - 1);
+            song = songs[currentSongIndex];
+        } while (song.year < MIN_YEAR || song.year > MAX_YEAR);
     }
-    const song = songs[currentSongIndex];
     const src = `https://www.youtube.com/embed/${song.id}?autoplay=1&start=${song.timestamp ?? DEFAULT_TIMESTAMP}`;
     video.src = src;
     clearTimeout(currentSongTimeout);
     currentSongTimeout = setTimeout(stopSong, SONG_EXCERPT_DURATION * 1000);
-
-    // Update interface.
-    playButton.disabled = true;
-    solutionButton.disabled = false;
-    solution.innerText = "";
 }
 
 function stopSong() {
@@ -39,8 +52,19 @@ function stopSong() {
 }
 
 function revealSong() {
-    solution.innerText = JSON.stringify(songs[currentSongIndex]);
-    playButton.disabled = false;
+    const song = songs[currentSongIndex];
+    embed.src = `https://www.youtube.com/embed/${song.id}`;
+    year.textContent = song.year;
+    country.textContent = song.country;
+    title.textContent = song.title;
+    artist.textContent = song.artist;
+    place.textContent = song.place;
+    solution.style.visibility = "visible";
+}
+
+function toggleButtons() {
+    solutionButton.classList.toggle("disabled");
+    playButton.classList.toggle("disabled");
 }
 
 /**

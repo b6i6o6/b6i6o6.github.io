@@ -1,0 +1,14 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#play, #solution {
+    background-color: #f0286e;
+    color: white;
+}
+
+#reveal {
+    background-color: #00aad2;
+    color: white;
+}
