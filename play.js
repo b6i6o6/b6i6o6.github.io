@@ -6,7 +6,7 @@ const DEFAULT_TIMESTAMP = 30;
 const SONG_EXCERPT_DURATION = 25;
 
 const params = new URLSearchParams(window.location.search);
-let currentSongIndex = Number(params.get("play").replace(/\D/g, ""));
+let currentSongIndex = Number(params.get("play")?.replace(/\D/g, ""));
 let currentSongTimeout;
 
 const playButton = document.querySelector('#play');
