@@ -1,18 +1,15 @@
 import { songs } from "./songs.js";
 
-const MIN_YEAR = 2024;
+const MIN_YEAR = 2023;
 const MAX_YEAR = 2024;
 const DEFAULT_TIMESTAMP = 30;
-const SONG_EXCERPT_DURATION = 25;
+const SONG_DURATION = 25;
 
 const params = new URLSearchParams(window.location.search);
-let currentSongIndex = Number(params.get("play")?.replace(/\D/g, ""));
-let currentSongTimeout;
 
 const playButton = document.querySelector('#play');
 const solutionButton = document.querySelector('#reveal');
 const solution = document.querySelector('#solution');
-const embed = document.querySelector('#embed');
 const year = document.querySelector('#year');
 const country = document.querySelector("#country");
 const title = document.querySelector("#title");
@@ -21,44 +18,40 @@ const place = document.querySelector("#place");
 const video = document.querySelector('#video');
 
 playButton.addEventListener('click', () => {
-    startSong();
-    toggleButtons();
     solution.style.visibility = "hidden";
+    toggleButtons();
+    playSong();
 });
 solutionButton.addEventListener('click', () => {
-    revealSong();
     toggleButtons();
+    revealSong();
 });
 
-function startSong() {
-    let song;
+function playSong() {
+    let index;
     if (params.has("play")) {
+        index = Number(params.get("play")?.replace(/\D/g, ""));
         params.delete("play");
-        song = songs[currentSongIndex];
     } else {
         do {
-            currentSongIndex = randomIntFromInterval(0, songs.length - 1);
-            song = songs[currentSongIndex];
+            index = randomIntFromInterval(0, songs.length - 1);
+            song = songs[index];
         } while (song.year < MIN_YEAR || song.year > MAX_YEAR);
     }
-    const src = `https://www.youtube.com/embed/${song.id}?autoplay=1&start=${song.timestamp ?? DEFAULT_TIMESTAMP}`;
-    video.src = src;
-    clearTimeout(currentSongTimeout);
-    currentSongTimeout = setTimeout(stopSong, SONG_EXCERPT_DURATION * 1000);
-}
-
-function stopSong() {
-    video.src = "";
-}
-
-function revealSong() {
-    const song = songs[currentSongIndex];
-    embed.src = `https://www.youtube.com/embed/${song.id}`;
+    const song = songs[index];
+    video.dataset.id = song.id;
+    video.dataset.start = song.timestamp ?? DEFAULT_TIMESTAMP;
+    video.dataset.end = (song.timestamp ?? DEFAULT_TIMESTAMP) + SONG_DURATION;
     year.textContent = song.year;
     country.textContent = song.country;
     title.textContent = song.title;
     artist.textContent = song.artist;
     place.textContent = song.place;
+    initYouTubeVideos();
+    video.firstChild.click(); // Force autoplay.
+}
+
+function revealSong() {
     solution.style.visibility = "visible";
 }
 

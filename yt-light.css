@@ -1,0 +1,66 @@
+/*
+ * Light YouTube Embeds by @labnol
+ * Credit: https://www.labnol.org/
+ */
+
+.youtube-player {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    background: #000;
+    margin: 5px;
+  }
+
+.youtube-player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: transparent;
+  }
+
+.youtube-player img {
+    object-fit: cover;
+    display: block;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    height: auto;
+    cursor: pointer;
+    -webkit-transition: 0.4s all;
+    -moz-transition: 0.4s all;
+    transition: 0.4s all;
+  }
+
+.youtube-player img:hover {
+    -webkit-filter: brightness(75%);
+  }
+
+.youtube-player .play {
+    height: 179px;
+    width: 179px;
+    left: 50%;
+    margin-top: 30%;
+    position: relative;
+    background: url('../images/yt-play5-sq.png') no-repeat;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+  }
+
+.youtube-player .videotitle {
+    position: absolute;
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    color: white;
+    text-shadow: 1px 1px black;
+    left: 10px;
+    top: 10px;
+  }
