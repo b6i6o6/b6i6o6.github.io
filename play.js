@@ -28,20 +28,19 @@ solutionButton.addEventListener('click', () => {
 });
 
 function playSong() {
-    let index;
+    let song;
     if (params.has("play")) {
-        index = Number(params.get("play")?.replace(/\D/g, ""));
+        // TODO: fund using video id instead
+        song = songs[Number(params.get("play")?.replace(/\D/g, ""))];
         params.delete("play");
     } else {
         do {
-            index = randomIntFromInterval(0, songs.length - 1);
-            song = songs[index];
+            song = songs[randomIntFromInterval(0, songs.length - 1)];
         } while (song.year < MIN_YEAR || song.year > MAX_YEAR);
     }
-    const song = songs[index];
     video.dataset.id = song.id;
     video.dataset.start = song.timestamp ?? DEFAULT_TIMESTAMP;
-    video.dataset.end = (song.timestamp ?? DEFAULT_TIMESTAMP) + SONG_DURATION;
+    video.dataset.end = Number(video.dataset.start) + SONG_DURATION;
     year.textContent = song.year;
     country.textContent = song.country;
     title.textContent = song.title;
